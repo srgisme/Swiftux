@@ -8,10 +8,10 @@
 import Foundation
 import Swiftux
 
-struct MockAppState: StateType {
-    var counterState: MockCounterState = MockCounterState()
+struct MockAppState: StateType, Equatable {
+    var counterState = MockCounterState()
 }
 
-struct MockCounterState: StateType {
+struct MockCounterState: StateType, Equatable {
     var count: Int = 0
 }
