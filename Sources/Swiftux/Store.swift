@@ -29,7 +29,6 @@ final public class Store<S: StateType & Equatable>: ObservableObject, ActionDisp
 
     public subscript<Substate: StateType & Equatable>(dynamicMember member: KeyPath<S, Substate>) -> ObservedState<S, Substate> {
         guard let observedState = observedStates[member] as? ObservedState<S, Substate> else {
-            assertionFailure("Could not retrieve an an object of type ObservedState<\(S.self), \(Substate.self) from observedStates property on Store.")
             let newObservedState = ObservedState(member, on: self)
             observedStates[member] = newObservedState
             return newObservedState
