@@ -16,13 +16,13 @@ protocol ActionDispatchable {
 @dynamicMemberLookup
 final public class Store<S: StateType & Equatable>: ObservableObject, ActionDispatchable {
 
-    var state: CurrentValueSubject<S, Never>
+    @Published public private(set) var state: S
     var middleware: [Middleware]
     var reducer: Reducer<S>
     private var observedStates: [PartialKeyPath<S> : Any] = [:]
 
     public init(initialState: S, reducer: @escaping Reducer<S>, middleware: [Middleware]) {
-        self.state = CurrentValueSubject(initialState)
+        self.state = initialState
         self.reducer = reducer
         self.middleware = middleware
     }
@@ -41,13 +41,13 @@ final public class Store<S: StateType & Equatable>: ObservableObject, ActionDisp
     /// - Parameter action: The action to be dispatched.
     public func dispatch(_ action: ActionType) {
         let dispatchFunction: (ActionType) -> Void = { [weak self] in self?.dispatch($0) }
-        let getState = { [weak self] in self?.state.value }
+        let getState = { [weak self] in self?.state }
 
         guard let lastAction = middleware.execute(action: action, dispatchFunction: dispatchFunction, getState: getState) else {
             return
         }
         
-        state.send(reducer(lastAction, state.value))
+        state = reducer(lastAction, state)
     }
 
 }
