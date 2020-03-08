@@ -20,7 +20,7 @@ final public class Store<S: StateType>: ObservableObject {
         self.middleware = middleware
     }
 
-    /// This method uses the last action exiting the `Middleware` chain as the action to be passed to the `Reducer`. The `Reducer` uses this action and the current app state to produce a new app state for the `Store`. Sincle the app state is a `@Published` property,
+    /// This method is used to diapatch actions to the `Store`. It determines the last action exiting the `Middleware` chain and passes it to the `Reducer`. The `Reducer` uses this action and the current app state to produce a new app state for the `Store`. If a `Middleware` returns `nil`, the action is dropped, movement through the `Middleware` chain is halted, and a new state is not reduced.
     /// - Parameter action: The action to be dispatched.
     public func dispatch(_ action: ActionType) {
 
