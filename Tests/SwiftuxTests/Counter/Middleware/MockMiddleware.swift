@@ -7,17 +7,17 @@
 
 import Foundation
 import Swiftux
+import Combine
 
 class MockDispatchingMiddleware: Middleware {
-
-    func execute(action: ActionType, dispatchFunction: @escaping (ActionType) -> Void, getState: @escaping () -> StateType?) -> ActionType? {
+    func execute(action: ActionType, dispatch: @escaping (ActionType) -> Void, currentStateAfterDispatching: @escaping (ActionType?) -> AnyPublisher<StateType, Never>?) -> ActionType? {
 
         print("evaluating \(action) in middleware")
 
         if let counterAction = action as? AppAction.CounterAction {
             switch counterAction {
             case .increase:
-                dispatchFunction(AppAction.CounterAction.decrease(delta: 1))
+                dispatch(AppAction.CounterAction.decrease(delta: 1))
                 return counterAction
             case .decrease:
                 return counterAction
@@ -27,5 +27,4 @@ class MockDispatchingMiddleware: Middleware {
         return action
 
     }
-    
 }
