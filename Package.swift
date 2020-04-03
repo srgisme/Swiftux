@@ -22,8 +22,5 @@ let package = Package(
         .testTarget(
             name: "SwiftuxTests",
             dependencies: ["Swiftux"]),
-    ],
-    swiftLanguageVersions: [
-        .version("5.1")
     ]
 )
